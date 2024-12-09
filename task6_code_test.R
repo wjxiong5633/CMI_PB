@@ -76,6 +76,8 @@ importance_df <- data.frame(
 ) %>% arrange(desc(importance)) %>% head(10)
 # Sort the features by importance
 importance_df <- importance_df[order(importance_df$Importance, decreasing = TRUE), ]
+importance_df$Feature
+
 # Create a bar plot for feature importance
 ggplot(importance_df, aes(x = reorder(Feature, Importance), y = Importance)) +
   geom_bar(stat = "identity", fill = "skyblue") +

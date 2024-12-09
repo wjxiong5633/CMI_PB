@@ -2,7 +2,7 @@
 ##------------------------------------------task5  prediction   softimpute + PCA + rf
 set.seed(123)
 timelist_id = readRDS("./imputed_data/timelist_id.rds")
-combine_df <- readRDS("./weijia/CMI_PB/task_data/combine_df.rds")
+combine_df <- readRDS(".///task_data/combine_df.rds")
 ids = combine_df %>% dplyr::select(dataset,type,subject_id,specimen_id)
 baseline_df = combine_df[,1:15] %>% filter(timepoint == 0) %>% 
   mutate(age = round(as.numeric(difftime(   as.Date(date_of_boost),  as.Date(year_of_birth), units = "days"))/365)) %>% 
@@ -15,7 +15,7 @@ test_id = ids[ids$dataset == "2023_dataset",]
 
 
 time0 <- readRDS("./imputed_data/R_softimpute/time0_mean_count.rds")
-task5_train_y_CCL3 <- readRDS("./weijia/CMI_PB/task_data/task5/task5_train_y_CCL3.rds")
+task5_train_y_CCL3 <- readRDS(".///task_data/task5/task5_train_y_CCL3.rds")
 task5_y_id = task5_train_y_CCL3$subject_id
 
 y_data = task5_train_y_CCL3 %>% dplyr::select(-type,-timepoint,-specimen_id) %>% 
@@ -79,6 +79,8 @@ importance_df <- data.frame(
 ) %>% arrange(desc(importance)) %>% head(10)
 # Sort the features by importance
 importance_df <- importance_df[order(importance_df$Importance, decreasing = TRUE), ]
+importance_df$Feature
+
 # Create a bar plot for feature importance
 ggplot(importance_df, aes(x = reorder(Feature, Importance), y = Importance)) +
   geom_bar(stat = "identity", fill = "skyblue") +
@@ -116,6 +118,6 @@ pred_test_order = pred_test$rank
 
 
 ## read tsv
-result <- read.table("./weijia/CMI_PB/final_version/result_WJ.tsv", header = TRUE, sep = "\t")
+result <- read.table(".///final_version/result_WJ.tsv", header = TRUE, sep = "\t")
 result$X3.1..CCL3.D3.Rank = pred_test_order
-write.table(result, "./weijia/CMI_PB/final_version/result_WJ.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
+write.table(result, ".///final_version/result_WJ.tsv", sep = "\t", quote = FALSE, row.names = FALSE)
